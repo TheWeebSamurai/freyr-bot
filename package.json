@@ -1,0 +1,29 @@
+{
+  "name": "freyrbot",
+  "version": "0.0.1",
+  "description": "Bot for Freyr",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "bot",
+    "djs",
+    "discordjs",
+    "freyrads",
+    "ads"
+  ],
+  "author": "theweebsamurai",
+  "license": "ISC",
+  "dependencies": {
+    "@keyv/redis": "^5.1.4",
+    "axios": "^1.13.2",
+    "chalk": "^5.6.2",
+    "discord.js": "^14.25.1",
+    "ioredis": "^5.8.2",
+    "keyv": "^5.5.4",
+    "mongoose": "^9.0.0",
+    "redis": "^5.10.0",
+    "typescript": "^5.9.3"
+  }
+}
