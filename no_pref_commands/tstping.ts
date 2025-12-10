@@ -6,3 +6,5 @@ export default {
         message.reply("aswhat")
     }
 }
+
+//basic no prefix command template

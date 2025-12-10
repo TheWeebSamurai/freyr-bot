@@ -59,8 +59,8 @@ export default {
 
                 const cacheembed = new EmbedBuilder()
   .setColor("#ff0050") // TikTok pink
-  .setTitle(`🎵 TikTok Profile: ${caching.display_name}`)
-  .setURL(`https://www.tiktok.com/@${caching.user_name}`)
+  .setTitle(`🎵 Instagram Profile: ${caching.display_name}`)
+  .setURL(`https://www.instagram.com/${caching.user_name}`)
   .addFields(
     {
       name: "👤 Username",
@@ -88,7 +88,7 @@ export default {
       inline: true
     }
   )
-  .setThumbnail("https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg")
+  .setThumbnail("https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Instagram_logo_2016.svg/1200px-Instagram_logo_2016.svg.png")
   .setFooter({ text: "TikTok Scraper • FreyrAds" })
   .setTimestamp();
 
