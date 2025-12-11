@@ -92,10 +92,30 @@ export default {
   .setFooter({ text: "TikTok Scraper • FreyrAds" })
   .setTimestamp();
 
-                anothrMsg.delete().then(()=> {
-                    return channel.send({embeds: [cacheembed]});
-                })
-               
+            try {
+              anothrMsg.delete().then(()=> {
+                return channel.send({embeds: [cacheembed]});
+
+            })
+            } catch (err) {
+    console.error(err);
+
+    if (anothrMsg) {
+        anothrMsg.delete().catch(() => {});
+    }
+
+    const errorEmbed = new EmbedBuilder()
+        .setColor("#ff4d4d")
+        .setTitle("⚠️ Scraper Offline")
+        .setDescription("Something went wrong while fetching scraper data...")
+        .setTimestamp();
+
+    let test = await channel.send({ embeds: [errorEmbed] });
+
+    setTimeout(() => {
+        test.delete().catch(() => {});
+    }, 5000);
+}         
 
                 
             }
