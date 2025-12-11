@@ -28,7 +28,9 @@ export default {
         } catch (err) {
             console.error("Could not DM user:", err);
         }
+        
 
         await check_for_ticket_model.save()
+        setTimeout(() => ticket_channel.delete().catch(() => {}), 1500);
     }
 }
