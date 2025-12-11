@@ -56,6 +56,7 @@ export default {
                 console.log("CACHE:", JSON.parse(cached));
                 let caching = JSON.parse(cached)
                 console.log(JSON.parse(cached))
+                anothrMsg.delete()
 
                 const cacheembed = new EmbedBuilder()
   .setColor("#ff0050") // TikTok pink
@@ -172,6 +173,7 @@ export default {
            })
         } catch (err) {
             console.error(err);
+            anothrMsg.delete()
             const errorEmbed = new EmbedBuilder()
   .setColor("#ff4d4d")
   .setTitle("⚠️ Scraper Offline")
