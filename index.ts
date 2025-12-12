@@ -7,6 +7,7 @@ import path from 'path'
 import { redis } from './redis.ts'
 
 import mongoose from "mongoose";
+import { startWebsiteMonitor } from './scan.ts';
 
 async function connectDB() {
     try {
@@ -103,5 +104,7 @@ for(const file of noPrefFiles) {
 }
 
 export default client;
+
+startWebsiteMonitor(client)
 
 client.login(config.token) 

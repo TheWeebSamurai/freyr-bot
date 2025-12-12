@@ -16,6 +16,9 @@ import ticketmodel from "../models/ticketmodel";
 import { generateDiscordTranscript } from "../handlers/ticketCloseHandler";
 import fs from "fs";
 import path from "path";
+import issueModal from "../models/issueModel";
+import { announceIssue, announceStatusChange } from "../handlers/issueHandler";
+import issueModel from "../models/issueModel";
 
 export default {
     name: Events.InteractionCreate,
@@ -226,7 +229,70 @@ export default {
                 // Delete channel
                 setTimeout(() => channel.delete().catch(() => {}), 1500);
             }
+
+            if(interaction.customId === "manual_issue_modal") {
+                interaction.reply({content: "Issue has been added!", flags: MessageFlags.Ephemeral})
+                const issue_title = interaction.fields.getTextInputValue("issueTitleInput")
+                const issue_description = interaction.fields.getTextInputValue("issueDescInput")
+                const issue_type = interaction.fields.getStringSelectValues("issueTypeList")
+                
+                console.log(issue_title, issue_description, issue_type[0].toUpperCase())
+
+                let issue_created = await issueModal.create({
+                    issue_title,
+                    issue_description,
+                    issue_severity: issue_type[0].toUpperCase(),
+                    issue_author: interaction.user.username
+                })
+                await announceIssue(issue_created.issue_id, interaction.client)
+            }
+
+            if (interaction.customId.startsWith("change_status_modal")) {
+                const [, issue_id] = interaction.customId.split(":");
+            
+                const newTitle = interaction.fields.getTextInputValue("issue_status_title");
+                const newDesc = interaction.fields.getTextInputValue("issue_status_desc");
+            
+                const issue = await issueModel.findOne({ issue_id });
+            
+                if (!issue) {
+                    return interaction.reply({
+                        content: "Something went wrong!",
+                        flags: MessageFlags.Ephemeral
+                    });
+                }
+        
+                await announceStatusChange(
+                    issue.issue_id,
+                    issue.current_status,
+                    interaction.client,
+                    {
+                        newTitle: newTitle.trim() || null,
+                        newDesc:  newDesc.trim() || null
+                    }
+                );
+            
+                return interaction.reply({
+                    content: "Follow-up sent for this issue.",
+                    flags: MessageFlags.Ephemeral
+                });
+            }
+            
             
         }
+
+        /// AUTOCOMPLETE HANDLING
+
+        if(interaction.isAutocomplete()) {
+            const command = interaction.client.commands.get(interaction.commandName)
+
+            try {
+                await command.autocomplete(interaction)
+            } catch(err) {
+                console.log(err)
+
+            }
+        }
+
     }
 };

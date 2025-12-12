@@ -23,6 +23,7 @@
     "ioredis": "^5.8.2",
     "keyv": "^5.5.4",
     "mongoose": "^9.0.0",
+    "node-cron": "^4.2.1",
     "redis": "^5.10.0",
     "typescript": "^5.9.3"
   }
