@@ -26,9 +26,8 @@ import {
         });
       }
   
-      const balance = user.balance ?? 0;
-  
-      // Create embed
+      const balance = user.coins ?? 0;
+
       const embed = new EmbedBuilder()
         .setTitle("💰 Your Balance")
         .setDescription(
