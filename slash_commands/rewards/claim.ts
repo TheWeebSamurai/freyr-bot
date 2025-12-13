@@ -47,13 +47,12 @@ export default {
       });
 
       const db = mongoose.connection;
-      const res = await db.collection("discord_users").findOneAndUpdate(
+      const res = await db.collection("discord_users").updateOne(
         { discord_user_id: userId },
         { $inc: { coins: 2 } },
-        { returnDocument: "after" }
       );
-
-      if (!res|| !res.value) {
+      
+      if (res.matchedCount === 0) {
         return interaction.editReply(
           "Please verify your FreyrAds account using `/verify <code>`.\nIf you do not have a FreyrAds account, make one at https://freyrads.xyz"
         );
