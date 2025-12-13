@@ -76,7 +76,7 @@ import {
   
         return interaction.editReply({
           embeds: [embed],
-          content: `🔗 **Your reward link:**\n${rewardLink}`,
+          content: `🔗 **Hey there this is completely optional just so you know but thanks for supporting us :D**`,
           components: [row],
         });
   
