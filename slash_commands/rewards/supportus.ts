@@ -66,7 +66,7 @@ import {
             ].join("\n")
           )
           .setColor(0x7c7cff)
-          .setThumbnail("https://via.placeholder.com/256x256.png?text=LOGO")
+          .setThumbnail("https://freyrads.xyz/assets/fav-BXx-N2um.png")
           .setFooter({
             text: "Rewards reset every 23 hours",
           })
