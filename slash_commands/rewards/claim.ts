@@ -41,10 +41,7 @@ export default {
     await interaction.deferReply({ ephemeral: true });
 
     try {
-      await api.post("/rewards/discord/claim", {
-        code,
-        password: config.api_password,
-      });
+
 
       const db = mongoose.connection;
       const res = await db.collection("discord_users").updateOne(
@@ -57,6 +54,11 @@ export default {
           "Please verify your FreyrAds account using `/verify <code>`.\nIf you do not have a FreyrAds account, make one at https://freyrads.xyz"
         );
       }
+
+      await api.post("/rewards/discord/claim", {
+        code,
+        password: config.api_password,
+      });
 
       cooldowns.set(userId, now + COOLDOWN_MS);
       setTimeout(() => cooldowns.delete(userId), COOLDOWN_MS);
