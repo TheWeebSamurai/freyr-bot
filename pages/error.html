@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Error</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --card: #141824;
+      --accent: #ff6b6b;
+      --text: #e6e6f0;
+      --muted: #9aa0b4;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(1200px 600px at top, #1d2233, var(--bg));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      padding: 24px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #181d2e, var(--card));
+      border-radius: 16px;
+      padding: 32px;
+      max-width: 420px;
+      width: 100%;
+      box-shadow:
+        0 20px 40px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.04);
+      text-align: center;
+      animation: pop 0.35s ease-out;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.95); opacity: 0 }
+      to { transform: scale(1); opacity: 1 }
+    }
+
+    .icon {
+      font-size: 56px;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: 0.3px;
+    }
+
+    p {
+      margin-top: 12px;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: 15px;
+    }
+
+    .error-code {
+      margin-top: 16px;
+      display: inline-block;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: rgba(255,107,107,0.15);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .actions {
+      margin-top: 24px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    a.button {
+      text-decoration: none;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      background: #1f2538;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: transform 0.15s ease, background 0.15s ease;
+    }
+
+    a.button:hover {
+      background: #262c44;
+      transform: translateY(-1px);
+    }
+
+    footer {
+      margin-top: 20px;
+      font-size: 12px;
+      color: #6f7694;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="icon">⚠️</div>
+    <h1>Something went wrong</h1>
+
+    <p>
+      We couldn’t find the requested transcript or you may have hit a system limit.
+      Please try again later.
+    </p>
+
+    <div class="error-code">
+      ERROR · 404 / RATE LIMITED
+    </div>
+
+    <div class="actions">
+      <a class="button" href="javascript:history.back()">Go Back</a>
+      <a class="button" href="/">Home</a>
+    </div>
+
+    <footer>
+      © 2025 • Transcript Renderer
+    </footer>
+  </div>
+
+</body>
+</html>

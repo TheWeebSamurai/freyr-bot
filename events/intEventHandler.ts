@@ -195,21 +195,42 @@ export default {
                         ephemeral: true
                     });
                 }
-            
+
+                const customEmbed = new EmbedBuilder()
+                .setColor(0x7CFF00) // lime green
+                .setTitle("🎟️ Freyr Ticket Manager")
+                .setDescription(
+                  [
+                    "**Your ticket transcript is ready.**",
+                    "",
+                    "📄 Please download and store this transcript safely.",
+                    "⏳ **This link expires in 24 hours.**",
+                  ].join("\n")
+                )
+                .setFooter({
+                  text: "Freyr • Secure Ticket System",
+                })
+                .setTimestamp();
+
+                const buttons = new ButtonBuilder().setLabel("Ticket Transcript").setEmoji("🎫").setStyle(ButtonStyle.Link).setURL(`https://tickets.freyrads.xyz/render-transcript/${ticket.ticket_creator_id}`)
+                const actionrow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
          
                 const html = generateDiscordTranscript(ticket);
                 const filePath = path.join(process.cwd(), "transcripts", `${ticket.ticket_id}.html`);
             
                 fs.mkdirSync(path.dirname(filePath), { recursive: true });
                 fs.writeFileSync(filePath, html);
-            
+                setTimeout(() => {
+                    fs.unlink(filePath, () => {});
+                  }, 24 * 60 * 60 * 1000);
           
                 try {
                     const user = await interaction.client.users.fetch(ticket.ticket_creator_id);
             
                     await user.send({
                         content: `📄 Your ticket has been closed.\n**Reason:** ${reason}`,
-                        files: [filePath]
+                        embeds: [customEmbed],
+                        components: [actionrow]
                     });
                 } catch (err) {
                     console.error("Could not DM user:", err);

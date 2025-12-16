@@ -1,7 +1,7 @@
-import { ActionRowBuilder, AutoModerationActionExecution, AutoModerationRuleKeywordPresetType, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, Interaction, InteractionCallback, SlashCommandBuilder, TextChannel } from "discord.js";
+import { ActionRowBuilder, AutoModerationActionExecution, AutoModerationRuleKeywordPresetType, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, CommandInteraction, EmbedBuilder, Interaction, InteractionCallback, PermissionFlagsBits, SlashCommandBuilder, TextChannel } from "discord.js";
 import { Client } from "discord.js";
 export default {
-    data: new SlashCommandBuilder().setName("ticket_create").setDescription("Create the initial ticket! [FOR ADMINS]"),
+    data: new SlashCommandBuilder().setName("ticket_create").setDescription("Create the initial ticket! [FOR ADMINS]").setDefaultMemberPermissions(PermissionFlagsBits.ManageChannels),
     async execute(interaction: ChatInputCommandInteraction) {
         // let ping = client.ws.ping
         // await interaction.reply(`PONG , Client Ping : ${interaction.client.ws.ping}`)

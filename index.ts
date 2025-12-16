@@ -5,6 +5,7 @@ const { token } = config;
 import fs from 'fs'
 import path from 'path'
 import { redis } from './redis.ts'
+import './server.ts'
 
 import mongoose from "mongoose";
 import { startWebsiteMonitor } from './scan.ts';

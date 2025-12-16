@@ -1,4 +1,5 @@
 import type Keyv from 'keyv'
+import "express-session";
 // import RedisClient from "@redis/client/dist/lib/client";
 import { Collection } from "discord.js";
 declare module "discord.js" {
@@ -9,3 +10,16 @@ declare module "discord.js" {
         redis: Keyv;
     }
 }
+
+
+declare module "express-session" {
+    interface SessionData {
+      user?: {
+        id: string;
+        username: string;
+        avatar: string | null;
+        email?: string;
+      },
+      oauth_redirect: string;
+    }
+  }

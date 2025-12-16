@@ -1,4 +1,4 @@
-import { Message, TextChannel, ChannelType, EmbedBuilder } from "discord.js";
+import { Message, TextChannel, ChannelType, EmbedBuilder , PermissionFlagsBits} from "discord.js";
 import axios from "axios";
 import config from "../config.js";
 import mongoose from "mongoose";
@@ -7,6 +7,11 @@ axios.defaults.baseURL = "https://scraper.133713373.xyz"
 export default {
     name: "fetchd",
     async execute(message: Message, args: any[]) {
+      let commandUser = message.member
+      if(!commandUser?.permissions.has(PermissionFlagsBits.ManageMessages)) {
+          return;
+      }
+
         await message.delete()
         const channel = message.channel as TextChannel;
         let anothrMsg;
