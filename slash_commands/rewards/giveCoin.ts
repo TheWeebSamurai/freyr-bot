@@ -3,7 +3,7 @@ import { Client } from "discord.js";
 import mongoose from "mongoose";
 const db = mongoose.connection
 export default {
-    data: new SlashCommandBuilder().setName("give_coin").setDescription("Give's coins to a user").addUserOption(opt => opt.setName("target_user ").setRequired(true).setDescription("Please mention the user whom you want to add coins to ")).addNumberOption(opt => opt.setName("coin_amount").setDescription("How many coins do you want to give to the user?").setMinValue(1).setMaxValue(3).setRequired(true)),
+    data: new SlashCommandBuilder().setName("give_coin").setDescription("Give's coins to a user").addUserOption(opt => opt.setName("target_user").setRequired(true).setDescription("Please mention the user whom you want to add coins to ")).addNumberOption(opt => opt.setName("coin_amount").setDescription("How many coins do you want to give to the user?").setMinValue(1).setMaxValue(3).setRequired(true)),
     async execute(interaction: ChatInputCommandInteraction) {
         let mentioned_user = interaction.options.getUser("target_user") as User
         let amount_of_coins = interaction.options.getNumber("coin_amount")
