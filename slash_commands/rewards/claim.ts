@@ -64,7 +64,7 @@ export default {
       setTimeout(() => cooldowns.delete(userId), COOLDOWN_MS);
 
       return interaction.editReply(
-        "✅ You successfully claimed the code!\n💰 You gained **2 coins**.\n🎯 Collect **100 coins** to earn **$1.5 USD**."
+        "✅ You successfully claimed the code!\n💰 You gained **2 coins**.\n🎯 Collect **160 coins** to earn **$1.5 USD**."
       );
     } catch (err: any) {
       if (err?.response?.status === 400) {

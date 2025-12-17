@@ -24,10 +24,10 @@ export default {
             "Our support team will respond as soon as possible.\n\n" +
             "📌 **Please do not open multiple tickets.**"
         )
-        .setThumbnail("https://cdn-icons-png.flaticon.com/512/2991/2991148.png")
+        .setThumbnail("https://freyrads.xyz/assets/fav-BXx-N2um.png")
         .setFooter({
             text: "Support Ticket System",
-            iconURL: "https://cdn-icons-png.flaticon.com/512/1828/1828884.png"
+            iconURL: "https://freyrads.xyz/assets/fav-BXx-N2um.png"
         })
         .setTimestamp();
 
