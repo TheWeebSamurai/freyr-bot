@@ -19,7 +19,7 @@ export default {
             }
             const embed = new EmbedBuilder()
             .setTitle(`The balance of <@${mentioned_user.id}>`)
-            .setDescription(`The user has gained ${amount_of_coins} coins! please use \`/balance\` to check your balance`)
+            .setDescription(`The user has gained ${amount_of_coins} coins. Use \`/balance\` to check the balance.`)
             .setColor("White")
             .setFooter({text: "Powered by FreryAds", iconURL: "https://freyrads.xyz/assets/fav-BXx-N2um.png"})
             .setAuthor({name: "FreyrAds", iconURL: "https://freyrads.xyz/assets/fav-BXx-N2um.png"})
