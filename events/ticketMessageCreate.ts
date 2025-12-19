@@ -10,8 +10,7 @@ export default {
         if(message.author.bot) return;
         const ticketchannel = message.channel as TextChannel
         if(!ticketchannel.name.startsWith("ticket-")) return;
-
-        const check_for_ticket = await ticketmodel.findOne({$and: [{ticket_id: `ticket-${ticketchannel.topic}`}, {status: "OPEN"}]})
+        const check_for_ticket = await ticketmodel.findOne({$and: [{ticket_id: `${ticketchannel.name}`}, {status: "OPEN"}]})
 
         if(check_for_ticket) {
             check_for_ticket.messages.push({
