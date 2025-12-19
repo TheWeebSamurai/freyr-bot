@@ -47,7 +47,7 @@ app.get(
         return res.status(400).send("Invalid transcript ID");
       }
   
-      const filePath = path.join(__dirname, "transcripts", `${id}`);
+      const filePath = path.join(__dirname, "transcripts", `${id}.html`);
   
       if (!fs.existsSync(filePath)) {
         return res
