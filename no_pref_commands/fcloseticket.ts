@@ -1,8 +1,10 @@
-import { Message, TextChannel , EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, PermissionFlagsBits} from "discord.js"
+import { Message, TextChannel , EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder, PermissionFlagsBits, AttachmentBuilder} from "discord.js"
 import ticketmodel from '../models/ticketmodel'
 import { generateDiscordTranscript } from "../handlers/ticketCloseHandler"
 import  fs from 'fs'
 import path from 'path'
+import config from "../config"
+
 export default {
     name: "tfclose",
     async execute(message: Message, args: any[]) {
@@ -45,7 +47,7 @@ export default {
         })
         .setTimestamp();
 
-        const buttons = new ButtonBuilder().setLabel("Ticket Transcript").setEmoji("🎫").setStyle(ButtonStyle.Link).setURL(`https://tickets.freyrads.xyz/render-transcript/${check_for_ticket_model.ticket_creator_id}`)
+        const buttons = new ButtonBuilder().setLabel("Ticket Transcript").setEmoji("🎫").setStyle(ButtonStyle.Link).setURL(`https://tickets.freyrads.xyz/render-transcript/${check_for_ticket_model.ticket_id}`)
         const actionrow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
  
 
@@ -57,12 +59,19 @@ export default {
                 embeds: [customEmbed],
                 components: [actionrow]
             });
+
+            const attachment = new AttachmentBuilder(filePath, {
+              name: `ticket-${user.id}.html`
+          })
+          const ticket_log_channel = await message.client.channels.fetch(config.staff_ticket_log_id) as TextChannel
+          await ticket_log_channel.send({content: "🎫[Ticket-System] A ticket has been closed!", files: [attachment]})
         } catch (err) {
             console.error("Could not DM user:", err);
         }
         
 
         await check_for_ticket_model.save()
+        await message.reply("🎫 CLOSING TICKET")
         setTimeout(() => ticket_channel.delete().catch(() => {}), 1500);
     }
 }

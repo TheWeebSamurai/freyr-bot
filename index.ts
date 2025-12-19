@@ -6,6 +6,10 @@ import fs from 'fs'
 import path from 'path'
 import { redis } from './redis.ts'
 import './server.ts'
+import { WebhookClient } from 'discord.js';
+
+export const hook = new WebhookClient({url: config.webhook_url})
+
 
 import mongoose from "mongoose";
 import { startWebsiteMonitor } from './scan.ts';
@@ -109,3 +113,22 @@ export default client;
 startWebsiteMonitor(client)
 
 client.login(config.token) 
+
+
+process.on("unhandledRejection", (reason, promise) => {
+    console.error("Unhandled Rejection at:", promise);
+    hook.send({content: `Unhandled Rejection! ${promise}`})
+    console.error(reason);
+});
+
+process.on("uncaughtException", (error) => {
+    console.error("Uncaught Exception:", error);
+    hook.send({content: `Unhandled Rejection! ${error}`})
+
+});
+
+process.on("uncaughtExceptionMonitor", (error) => {
+    console.error("Uncaught Exception (monitor):", error);
+    hook.send({content: `Unhandled Rejection! ${error}`})
+
+});

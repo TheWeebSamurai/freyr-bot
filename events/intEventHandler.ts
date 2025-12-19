@@ -10,8 +10,9 @@ import {
     EmbedBuilder,
     MessageFlags,
     Events,
+    AttachmentBuilder,
 } from "discord.js";
-
+import { randomUUID } from "crypto";
 import ticketmodel from "../models/ticketmodel";
 import { generateDiscordTranscript } from "../handlers/ticketCloseHandler";
 import fs from "fs";
@@ -19,6 +20,7 @@ import path from "path";
 import issueModal from "../models/issueModel";
 import { announceIssue, announceStatusChange } from "../handlers/issueHandler";
 import issueModel from "../models/issueModel";
+import config from "../config";
 
 export default {
     name: Events.InteractionCreate,
@@ -109,9 +111,9 @@ export default {
 
                
                 const parentCategoryId = (interaction.channel as TextChannel)?.parentId;
-
+                const ticketId = randomUUID()
                 const newChannel = await interaction.guild?.channels.create({
-                    name: `ticket-${interaction.user.id}`,
+                    name: `ticket-${ticketId}`,
                     topic: interaction.user.id,
                     parent: parentCategoryId
                 });
@@ -130,12 +132,7 @@ export default {
                         iconURL: interaction.user.displayAvatarURL()
                     })
                     .setTitle(`🎫 ${title}`)
-                    .setDescription(
-                        `### 🧑 User\n${interaction.user}\n\n` +
-                        `### 📝 Title\n${title}\n\n` +
-                        `### 📄 Description\n${description}\n\n` +
-                        "A staff member will assist you shortly."
-                    )
+                    .setDescription(description + "\n" + "**Staff will be with you shortly , please refrain from mass pinging**")
                     .setTimestamp();
 
                 const closeButton = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -147,16 +144,24 @@ export default {
                 );
 
                 newChannel.send({
-                    content: `${interaction.user}`,
+                    content: `${interaction.user} <@&1373603542874718210>`,
                     embeds: [embed],
                     components: [closeButton]
                 });
+
+                newChannel.permissionOverwrites.edit(interaction.user.id, {
+                    ViewChannel: true,
+                    SendMessages: true,
+                    ReadMessageHistory: true,
+                    AddReactions: true,
+                    
+                })
 
            
                 const newTicket = await ticketmodel.create({
                     ticket_creator_id: interaction.user.id,
                     ticket_channel_id: newChannel.id,
-                    ticket_id: `ticket-${interaction.user.id}`,
+                    ticket_id: `ticket-${ticketId}`,
                     status: "OPEN",
                     ticket_title: title,
                     ticket_description: description
@@ -212,7 +217,7 @@ export default {
                 })
                 .setTimestamp();
 
-                const buttons = new ButtonBuilder().setLabel("Ticket Transcript").setEmoji("🎫").setStyle(ButtonStyle.Link).setURL(`https://tickets.freyrads.xyz/render-transcript/${ticket.ticket_creator_id}`)
+                const buttons = new ButtonBuilder().setLabel("Ticket Transcript").setEmoji("🎫").setStyle(ButtonStyle.Link).setURL(`https://tickets.freyrads.xyz/render-transcript/${ticket.ticket_id}`)
                 const actionrow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
          
                 const html = generateDiscordTranscript(ticket);
@@ -232,6 +237,12 @@ export default {
                         embeds: [customEmbed],
                         components: [actionrow]
                     });
+
+                    const attachment = new AttachmentBuilder(filePath, {
+                        name: `ticket-${user.id}.html`
+                    })
+                    const ticket_log_channel = await interaction.client.channels.fetch(config.staff_ticket_log_id) as TextChannel
+                    await ticket_log_channel.send({content: "🎫[Ticket-System] A ticket has been closed!", files: [attachment]})
                 } catch (err) {
                     console.error("Could not DM user:", err);
                 }
