@@ -25,6 +25,8 @@ export interface ITicket extends Document {
     status: "OPEN" | "CLOSED" | "PENDING";
     opened_at: Date;
     ticket_close_reason: string;
+    transcript_expiry: Date;
+    transcript_expired: boolean
 }
 
 
@@ -52,7 +54,9 @@ const TicketSchema = new Schema<ITicket>({
     opened_at: { type: Date, default: Date.now },
     ticket_title: String,
     ticket_description: String,
-    ticket_close_reason: {type: String, default: null}
+    ticket_close_reason: {type: String, default: null},
+    transcript_expiry: {type: Date, default: null},
+    transcript_expired: {type: Boolean, default: false}
 });
 
 export default model<ITicket>("Ticket", TicketSchema);

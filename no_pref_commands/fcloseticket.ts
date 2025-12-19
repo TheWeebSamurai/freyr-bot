@@ -14,16 +14,14 @@ export default {
         }
         let ticket_channel = message.channel as TextChannel
         if(!ticket_channel.name.startsWith("ticket-")) return;
-        let check_for_ticket_model = await ticketmodel.findOne({ticket_channel_id: ticket_channel.id})
-        if(!check_for_ticket_model) return;
-        if (check_for_ticket_model.status === "CLOSED") return;
+
 
         let reason = args.join(" ") || "NO REASON PROVIDED"
-        check_for_ticket_model.ticket_close_reason = reason
-        check_for_ticket_model.status = "CLOSED"
-
-        const html = generateDiscordTranscript(check_for_ticket_model);
-        const filePath = path.join(process.cwd(), "transcripts", `${check_for_ticket_model.ticket_id}.html`);
+        const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+        let ticket = await ticketmodel.findOneAndUpdate({ticket_channel_id: ticket_channel.id, status: {$ne: "CLOSED"}}, {status: "CLOSED", ticket_close_reason: reason || "No Reason Provided", transcript_expiry: expiresAt}, {new: true})
+        if(!ticket) return
+        const html = generateDiscordTranscript(ticket);
+        const filePath = path.join(process.cwd(), "transcripts", `${ticket.ticket_id}.html`);
         fs.mkdirSync(path.dirname(filePath), { recursive: true });
         fs.writeFileSync(filePath, html);
 
@@ -47,12 +45,12 @@ export default {
         })
         .setTimestamp();
 
-        const buttons = new ButtonBuilder().setLabel("Ticket Transcript").setEmoji("🎫").setStyle(ButtonStyle.Link).setURL(`https://tickets.freyrads.xyz/render-transcript/${check_for_ticket_model.ticket_id}`)
+        const buttons = new ButtonBuilder().setLabel("Ticket Transcript").setEmoji("🎫").setStyle(ButtonStyle.Link).setURL(`https://tickets.freyrads.xyz/render-transcript/${ticket.ticket_id}`)
         const actionrow = new ActionRowBuilder<ButtonBuilder>().addComponents(buttons)
  
 
         try {
-            const user = await message.client.users.fetch(check_for_ticket_model.ticket_creator_id);
+            const user = await message.client.users.fetch(ticket.ticket_creator_id);
     
             await user.send({
                 content: `📄 Your ticket has been closed.\n**Reason:** ${reason}`,
@@ -70,7 +68,6 @@ export default {
         }
         
 
-        await check_for_ticket_model.save()
         await message.reply("🎫 CLOSING TICKET")
         setTimeout(() => ticket_channel.delete().catch(() => {}), 1500);
     }

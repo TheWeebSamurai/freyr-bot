@@ -188,11 +188,8 @@ export default {
 
                 const channel = interaction.channel as TextChannel;
                 const reason = interaction.fields.getTextInputValue("ticket_close_reason");
-            
-                const ticket = await ticketmodel.findOne({
-                    ticket_channel_id: channel.id,
-                    status: "OPEN"
-                });
+                const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+                const ticket = await ticketmodel.findOneAndUpdate({ticket_channel_id: channel.id, status: {$ne: "CLOSED"}}, {status: "CLOSED", ticket_close_reason: reason || "No Reason Provided", transcript_expiry: expiresAt}, {new: true});
             
                 if (!ticket) {
                     return interaction.reply({
@@ -248,9 +245,7 @@ export default {
                 }
             
 
-                ticket.status = "CLOSED";
-                ticket.ticket_close_reason = reason;
-                await ticket.save();
+
             
                 // Acknowledge
                 await interaction.reply({

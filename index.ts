@@ -6,6 +6,7 @@ import fs from 'fs'
 import path from 'path'
 import { redis } from './redis.ts'
 import './server.ts'
+import './handlers/handleExpired.ts'
 import { WebhookClient } from 'discord.js';
 
 export const hook = new WebhookClient({url: config.webhook_url})
