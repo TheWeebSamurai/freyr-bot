@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   ChatInputCommandInteraction,
+  MessageFlags,
   SlashCommandBuilder,
 } from "discord.js";
 import config from "../../config";
@@ -31,10 +32,16 @@ export default {
     const cooldownEnd = cooldowns.get(userId);
     if (cooldownEnd && cooldownEnd > now) {
       const remaining = Math.ceil((cooldownEnd - now) / 1000);
-      return interaction.reply({
-        content: `⏳ You are on cooldown. Try again in **${remaining}s**.`,
-        ephemeral: true,
-      });
+      if(remaining >= 3600) {
+        interaction.reply({
+          content: `⏳ You are currently on cooldown for **${Math.floor(remaining/3600)}h ${Math.floor((remaining%3600)/60)}m ${remaining%60}s**.`,
+          flags: MessageFlags.Ephemeral
+        })
+      } else if(remaining >= 60) {
+        interaction.reply({content: `⏳ You are currently on cooldown for **${Math.floor(remaining/60)}m ${remaining%60}s**.`, flags: MessageFlags.Ephemeral})
+      } else {
+        interaction.reply({content: `⏳ You are currently on cooldown for **${remaining}s**.`, flags: MessageFlags.Ephemeral})
+      }
     }
 
     const code = interaction.options.getString("code", true);
