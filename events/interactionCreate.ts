@@ -1,3 +1,5 @@
+import config from "../config";
+
 const { Events, MessageFlags } = require('discord.js');
 
 export default {
@@ -14,7 +16,18 @@ export default {
 		}
 
 		try {
-			await command.execute(interaction);
+			if(config.maintainenace) {
+				if(config.testers.includes(interaction.user.id)) {
+					await command.execute(interaction);
+				} else {
+					interaction.reply({
+						content: '⚠️ The bot is currently under maintenance. Please try again later.',
+						flags: MessageFlags.Ephemeral,
+					});
+				}
+			} else {
+				await command.execute(interaction);
+			}
 		} catch (error) {
 			console.error(error);
 			if (interaction.replied || interaction.deferred) {

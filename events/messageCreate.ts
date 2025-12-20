@@ -16,7 +16,17 @@ export default {
 
         const command = await message.client.message_commands.get(commandName)
         if(!command) return;
-        try { await command.execute(message, args)
+        try { 
+            
+        if(config.maintainenace) { 
+            if(config.testers.includes(message.author.id)) {
+                await command.execute(message, args)
+            } else {
+                return message.reply({content: "Bot is currently under maintainenace"})
+            }
+        } else {
+            await command.execute(message, args)
+        }
            
         } catch(err) {
             console.log(chalk.red(`[ERROR] ${err}`))

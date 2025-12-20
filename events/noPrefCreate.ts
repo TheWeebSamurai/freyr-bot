@@ -1,5 +1,5 @@
 import { Events,  MessageFlags, Message} from "discord.js";
-import { prefix } from "../config";
+import config, { prefix } from "../config";
 import chalk from "chalk";
 
 export default {
@@ -14,7 +14,15 @@ export default {
         const command = message.client.no_pref_commands.get(commandName);
         if(!command) return ;
         try {
-            await command.execute(message, args)
+            if(config.maintainenace) {
+                if(config.testers.includes(message.author.id)) {
+                    await command.execute(message, args)
+                } else {
+                    return;
+                }
+            } else {
+                await command.execute(message, args)
+            }
         } catch (err) {
             console.log(chalk.red(`[NO PREFIX CMD ERROR] ${err}`));
             await message.reply("Something went wrong running that command.");

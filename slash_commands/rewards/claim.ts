@@ -58,6 +58,7 @@ export default {
       await api.post("/rewards/discord/claim", {
         code,
         password: config.api_password,
+        discordUserId: userId
       });
 
       cooldowns.set(userId, now + COOLDOWN_MS);
