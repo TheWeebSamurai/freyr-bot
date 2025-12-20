@@ -33,14 +33,14 @@ export default {
     if (cooldownEnd && cooldownEnd > now) {
       const remaining = Math.ceil((cooldownEnd - now) / 1000);
       if(remaining >= 3600) {
-        interaction.reply({
+        return interaction.reply({
           content: `⏳ You are currently on cooldown for **${Math.floor(remaining/3600)}h ${Math.floor((remaining%3600)/60)}m ${remaining%60}s**.`,
           flags: MessageFlags.Ephemeral
         })
       } else if(remaining >= 60) {
-        interaction.reply({content: `⏳ You are currently on cooldown for **${Math.floor(remaining/60)}m ${remaining%60}s**.`, flags: MessageFlags.Ephemeral})
+        return interaction.reply({content: `⏳ You are currently on cooldown for **${Math.floor(remaining/60)}m ${remaining%60}s**.`, flags: MessageFlags.Ephemeral})
       } else {
-        interaction.reply({content: `⏳ You are currently on cooldown for **${remaining}s**.`, flags: MessageFlags.Ephemeral})
+        return interaction.reply({content: `⏳ You are currently on cooldown for **${remaining}s**.`, flags: MessageFlags.Ephemeral})
       }
     }
 
