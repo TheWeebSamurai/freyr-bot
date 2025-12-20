@@ -46,6 +46,7 @@ import {
         const response = await api.post("/discord_bot/admin/create_link", {
           code: rewardCode,
           password: api_password,
+          discord_user_id: userId
         });
   
         const rewardLink = response.data.link;
@@ -60,7 +61,7 @@ import {
               "By completing a short sponsored offer, you help keep **Freyr Ads** running ❤️",
               "",
               "🎁 **Reward:** `+2 coins`",
-              "💰 **100 coins = $1.5 USD payout`**",
+              "💰 **200 coins = $1.7 USD payout`**",
               "",
               "Click the button below to continue:",
             ].join("\n")
@@ -76,7 +77,7 @@ import {
   
         return interaction.editReply({
           embeds: [embed],
-          content: `🔗 **Hey there this is completely optional just so you know but thanks for supporting us :D**`,
+          content: `🔗 **Hey there this is completely optional just so you know but thanks for supporting us :D, It takes Less than 2 minutes to complete and it helps us a lot**`,
           components: [row],
         });
   

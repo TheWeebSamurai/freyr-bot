@@ -44,29 +44,34 @@ export default {
 
 
       const db = mongoose.connection;
-      const res = await db.collection("discord_users").updateOne(
-        { discord_user_id: userId },
-        { $inc: { coins: 2 } },
-      );
-      
-      if (res.matchedCount === 0) {
-        return interaction.editReply(
-          "Please verify your FreyrAds account using `/verify <code>`.\nIf you do not have a FreyrAds account, make one at https://freyrads.xyz"
-        );
-      }
 
-      await api.post("/rewards/discord/claim", {
+
+
+      const dres = await api.post("/rewards/discord/claim", {
         code,
         password: config.api_password,
         discordUserId: userId
       });
 
+
+      if(dres.status === 200 && dres.data.success) {
+      const res = await db.collection("discord_users").updateOne(
+        { discord_user_id: userId },
+        { $inc: { coins: 2 } },
+      );
+
+        if (res.matchedCount === 0) {
+        return interaction.editReply(
+          "Please verify your FreyrAds account using `/verify <code>`.\nIf you do not have a FreyrAds account, make one at https://freyrads.xyz"
+        );
+      }
       cooldowns.set(userId, now + COOLDOWN_MS);
       setTimeout(() => cooldowns.delete(userId), COOLDOWN_MS);
-
       return interaction.editReply(
-        "✅ You successfully claimed the code!\n💰 You gained **2 coins**.\n🎯 Collect **160 coins** to earn **$1.5 USD**."
+        "✅ You successfully claimed the code!\n💰 You gained **2 coins**.\n🎯 Collect **200 coins** to earn **$1.7 USD**."
       );
+      }
+
     } catch (err: any) {
       if (err?.response?.status === 400) {
         return interaction.editReply("⚠️ You have already claimed this code.");
@@ -75,6 +80,14 @@ export default {
       if (err?.response?.status === 404) {
         return interaction.editReply("❌ This code is expired or invalid.");
       }
+
+            if (err?.response?.status === 403) {
+        return interaction.editReply("❌ Please complete the lootlabs offer first!");
+      }
+                  if (err?.response?.status === 403 && err?.response?.data?.message === "") {
+        return interaction.editReply("❌ Please complete the lootlabs offer first!");
+      }
+
 
       return interaction.editReply(
         "🚨 Could not process your claim. Please try again later."

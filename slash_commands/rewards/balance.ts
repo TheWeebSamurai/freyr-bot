@@ -36,7 +36,7 @@ import {
             "",
             `🪙 **Coins:** **${balance.toLocaleString()}**`,
             "",
-            "🎯 **100 coins = $1.5 USD**",
+            "🎯 **200 coins = $1.7 USD**",
           ].join("\n")
         )
         .setColor(0x7c7cff)
