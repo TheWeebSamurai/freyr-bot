@@ -11,7 +11,7 @@ import {
   } from "discord.js";
   import axios from "axios";
   import crypto from "crypto";
-  import { api_password } from "../../config";
+  import config, { api_password } from "../../config";
   
   const cooldown = new Map<string, number>();
   const COOLDOWN_TIME = 1000 * 60 * 60 * 23; // 23 hours
@@ -44,7 +44,7 @@ import {
       }
       }
   
-      await interaction.deferReply({ ephemeral: true });
+      await interaction.deferReply();
   
       try {
         const rewardCode = crypto.randomBytes(7).toString("hex");
@@ -54,10 +54,12 @@ import {
           password: api_password,
           discord_user_id: userId
         });
-  
+        console.log(response.data)
         const rewardLink = response.data.link;
   
-        cooldown.set(userId, now + COOLDOWN_TIME);
+        if(!config.testers.includes(userId)) {
+          cooldown.set(userId, now + COOLDOWN_TIME);
+        }
         setTimeout(() => cooldown.delete(userId), COOLDOWN_TIME);
   
         const embed = new EmbedBuilder()

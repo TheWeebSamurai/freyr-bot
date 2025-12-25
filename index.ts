@@ -113,7 +113,7 @@ export default client;
 
 startWebsiteMonitor(client)
 
-client.login(config.token) 
+client.login(config.beta_token); 
 
 
 process.on("unhandledRejection", (reason, promise) => {

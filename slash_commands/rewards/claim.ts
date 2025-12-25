@@ -8,7 +8,7 @@ import config from "../../config";
 import mongoose from "mongoose";
 
 const cooldowns = new Map<string, number>();
-const COOLDOWN_MS = 24 * 60 * 60 * 1000;
+const COOLDOWN_MS = 12 * 60 * 60 * 1000;
 
 const api = axios.create({
   baseURL: "https://rewards.freyrads.xyz",
@@ -57,8 +57,9 @@ export default {
       const dres = await api.post("/rewards/discord/claim", {
         code,
         password: config.api_password,
-        discordUserId: userId
+        discord_user_id: userId
       });
+      console.log(dres.data);
 
 
       if(dres.status === 200 && dres.data.success) {
@@ -72,7 +73,9 @@ export default {
           "Please verify your FreyrAds account using `/verify <code>`.\nIf you do not have a FreyrAds account, make one at https://freyrads.xyz"
         );
       }
-      cooldowns.set(userId, now + COOLDOWN_MS);
+      if(!config.testers.includes(userId)) {
+        cooldowns.set(userId, now + COOLDOWN_MS);
+      }
       setTimeout(() => cooldowns.delete(userId), COOLDOWN_MS);
       return interaction.editReply(
         "✅ You successfully claimed the code!\n💰 You gained **2 coins**.\n🎯 Collect **200 coins** to earn **$1.7 USD**."
@@ -81,17 +84,21 @@ export default {
 
     } catch (err: any) {
       if (err?.response?.status === 400) {
+        console.log(err?.response)
         return interaction.editReply("⚠️ You have already claimed this code.");
       }
 
       if (err?.response?.status === 404) {
+               console.log(err?.response)
         return interaction.editReply("❌ This code is expired or invalid.");
       }
 
             if (err?.response?.status === 403) {
+                     console.log(err?.response)
         return interaction.editReply("❌ Please complete the lootlabs offer first!");
       }
                   if (err?.response?.status === 403 && err?.response?.data?.message === "") {
+                           console.log(err?.response)
         return interaction.editReply("❌ Please complete the lootlabs offer first!");
       }
 

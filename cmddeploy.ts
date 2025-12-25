@@ -22,14 +22,14 @@ for(const folder of commandFolders) {
     }
 }
 
-const rest = new REST().setToken(config.token);
+const rest = new REST().setToken(config.beta_token);
 (async () => {
 try {
  console.log(chalk.blue(`Started Refreshing ${commands.length} application commands!`))
  commands.map(command => {
     console.log(chalk.green(`[LOADED] ${command.name}`))
  })
- const data = await rest.put(Routes.applicationGuildCommands(config.clientId, config.guildId), {body: commands})
+ const data = await rest.put(Routes.applicationGuildCommands(config.client_id, config.guildId), {body: commands})
 } catch(err) {
     console.log(chalk.red(`[ERROR] ${err}`))
 }

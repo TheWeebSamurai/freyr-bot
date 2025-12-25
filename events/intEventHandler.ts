@@ -84,6 +84,12 @@ export default {
             
                 return interaction.showModal(closeModal);
             }
+
+            if(interaction.customId.startsWith("inventory_")) {
+                if (!interaction.isButton()) return;
+                const command = await interaction.client.commands.get("inventory");
+                await command.button_interaction(interaction, interaction.client);
+            }
         }
 
 
